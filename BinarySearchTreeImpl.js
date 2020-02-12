@@ -1,66 +1,108 @@
-/*
-    This is a BST.
-*/
-function Node(val) {
+function Node(val){
     this.val = val;
     this.left = null;
     this.right = null;
 }
-Node.prototype.insert = function insert(val) {
-    if(!this) return;
 
-    if(val > this.val){
+Node.prototype.insert = function insert(val){
+    if(val < this.val){
+        if(!this.left){
+            node = new Node(val);
+            this.left = node;
+            return;
+        }else{
+            this.left.insert(val);
+        }
+    }else{
         if(!this.right){
-            this.right = new Node(val)
+            node = new Node(val);
+            this.right = node;
             return;
         }else{
             insert.call(this.right, val);
         }
-    }else {
-        if(!this.left){
-            this.left = new Node(val);
-            return;
+    }
+}
+
+Node.prototype.search = function search(searchVal){
+    if(!this.val) return false;
+    if(this.val === searchVal) return true;
+
+    if(searchVal > this.val){
+        return search.call(this.right, searchVal);
+    }else{
+        return search.call(this.left, searchVal);
+    }
+}
+
+Node.prototype.deleteNode = function deleteNode(deleteVal){
+    if(!this.val) return this;
+
+    if(deleteVal > this.val){
+        this.right = deleteNode.call(this.right, deleteVal);
+    }else if(deleteVal < this.val){
+        this.left = deleteNode.call(this.left, deleteVal);
+    }else{
+        if(!this.left && !this.right){
+            return null;
+        }else if(!this.right){
+            let predesessor = findPredesessor(this);
+            this.val = predesessor.val;
+            this.left = deleteNode.call(this.left, this.val);
         }else{
-            insert.call(this.left, val);
+            let successor = findSuccessor(this);
+            this.val = successor.val;
+            this.right = deleteNode.call(this.right, this.val);
         }
     }
-};
 
-Node.prototype.inorderTraversalIterative = function () {
+    return this;
+}
 
-};
+Node.prototype.inOrder = function inorder(){
+    if(!this.val) return;
 
-Node.prototype.printInorder = function printInorder() {
-    if(!this || !this.val) return;
-
-    printInorder.call(this.left);
+    if(this.left) this.left.inOrder()
     console.log(this.val);
-    printInorder.call(this.right);
-    return;
-};
- 
+    if(this.right)this.right.inOrder();
+}
 
-Node.prototype.preorderTraversal = function () {
-};
+function findPredesessor(node){
+    let predesessor = node.left;
+    while(predesessor.right){
+        predesessor = predesessor.right;
+    }
+    return predesessor;
 
- 
+}
+function findSuccessor(node){
+    let successor = node.right;
+    while(successor.left){
+        successor = successor.left;
+    }
+    return successor;
+}
 
-Node.prototype.postorderTraversal = function () {
-};
+let tree = new Node(40);
 
- 
-
-Node.prototype.delete = function () {
-};
-
-// [20,12,22,10,null,21,40]
-let tree = new Node(20);
-tree.insert(12);
-tree.insert(22);
+tree.insert(20);
 tree.insert(10);
-tree.insert(21);
-tree.insert(40);
+tree.insert(5);
+tree.insert(30);
+tree.insert(25);
+tree.insert(35);
+tree.insert(60);
+tree.insert(80);
+tree.insert(74);
+tree.insert(76);
+tree.insert(27);
 
-tree.printInorder();
-
-tree.inorderTraversalIterative();
+tree.inOrder();
+console.log('----------');
+console.log(tree.search(30));
+console.log('----------');
+tree.deleteNode(30)
+console.log(tree.search(30));
+tree.deleteNode(60);
+console.log('----------');
+tree.inOrder();
