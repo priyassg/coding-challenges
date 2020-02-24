@@ -59,12 +59,30 @@ Node.prototype.deleteNode = function deleteNode(deleteVal){
     return this;
 }
 
-Node.prototype.inOrder = function inorder(){
+Node.prototype.print = function inorder(){
     if(!this.val) return;
 
     if(this.left) this.left.inOrder()
     console.log(this.val);
     if(this.right)this.right.inOrder();
+}
+
+Node.prototype.inOrder = function inOrder(){
+    if(!this.val) return;
+    const result = [];
+    
+    let left = inOrder.call(this.left);
+    if(left) result.push(...left);
+    result.push(this.val);
+    let right = inOrder.call(this.right);
+    if(right) result.push(...right);
+
+    return result;
+
+}
+
+Node.prototype.iterativePostOrder = function (){
+
 }
 
 function findPredesessor(node){
@@ -97,12 +115,13 @@ tree.insert(74);
 tree.insert(76);
 tree.insert(27);
 
-tree.inOrder();
-console.log('----------');
-console.log(tree.search(30));
-console.log('----------');
-tree.deleteNode(30)
-console.log(tree.search(30));
-tree.deleteNode(60);
-console.log('----------');
-tree.inOrder();
+// tree.print();
+// console.log('----------');
+// console.log(tree.search(30));
+// console.log('----------');
+// tree.deleteNode(30)
+// console.log(tree.search(30));
+// tree.deleteNode(60);
+// console.log('----------');
+// tree.print();
+console.log(tree.inOrder());

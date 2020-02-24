@@ -3,27 +3,20 @@
 //  * @return {number}
 //  */
 var maxArea = function(arr) {
-  let max = 0;
+  let len = arr.length;
   let left = 0;
-  let right = arr.length - 1;
-  let map = {};
-  helper(left, right);
-
-  function helper(left, right) {
-    let key = `${left} : ${right}`;
-    if(map[key]) return;
-    if(left >= right) return;
-    helper(left+1, right);
-    helper(left, right-1);
-    if(!map[key]){
-      map[key] = Math.min(arr[left], arr[right]) * (right-left);
-    }
-
-    console.log(`left: ${left}, right: ${right}`);
+  let right = len-1;
+  let maxArea = 0;
+  
+  while(left < right){
+      let newArea = Math.min(arr[left], arr[right]) * (right - left);
+      if(newArea > maxArea) maxArea = newArea;
+        if(arr[left] < arr[right]){
+            left += 1;
+        }else{
+            right = right -1;
+        }
   }
-  console.log(map);
-
-  return max;
+  return maxArea;
 };
-console.log(maxArea([1, 8, 6, 2, 5]));
 
