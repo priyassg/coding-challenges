@@ -16,20 +16,22 @@ function helper(node, l, u){
 }
 
 //Recurssive - Inorder property
-//TODO : better solution so as to not use the global 'previousNode' variable
-var previousNode = null;
-function isValidInOrder(root){
-    previousNode = null;
-    return helperInOrder(root); 
+function isValidBSTInOrder(root){
+    const stack = []
+    return helperInOrder(root, stack); 
 }
 
-function helperInOrder(node){
+function helperInOrder(node, stack){
     if(!node) return true;
-
-    if(!helperInOrder(node.left)) return false;
-    if(previousNode !== null && node.val <= previousNode) return false;
-    previousNode = node.val;
-    if(!helperInOrder(node.right)) return false;
+    if(!helperInOrder(node.left, stack)) return false;
+    if(stack.length){
+        const el = stack.pop();
+        if(node.val <= el) return false;
+        stack.push(node.val);
+    }else{
+        stack.push(node.val);
+    }
+    if(!helperInOrder(node.right, stack)) return false;
     
     return true;
 }
